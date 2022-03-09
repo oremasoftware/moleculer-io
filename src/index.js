@@ -313,7 +313,7 @@ module.exports = {
 				}
 
 				if (item.onConnection && _.isFunction(item.onConnection)) {
-					item.onConnection(this);
+					item.onConnection(socket);
 				}
 			}
 			);
