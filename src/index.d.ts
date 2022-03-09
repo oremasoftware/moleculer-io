@@ -1,38 +1,29 @@
-declare module "moleculer-io" {
-	import { DefaultEventsMap, EventsMap } from "socket.io/dist/typed-events";
-	import { Client } from "socket.io/dist/client";
+declare module 'moleculer-io' {
+	import { DefaultEventsMap, EventsMap } from 'socket.io/dist/typed-events'
+	import { Client } from 'socket.io/dist/client'
 
-	import { Server, ServerOptions, Socket } from "socket.io";
-	import {
-		Context,
-		ServiceSchema,
-		CallingOptions,
-		ServiceMethods,
-		ServiceSettingSchema,
-		Service
-	} from "moleculer";
-	import { ApiSettingsSchema } from "moleculer-web";
-	import * as http from "http";
-	import { SocketOptions } from "socket.io-client";
+	import { Server, ServerOptions, Socket } from 'socket.io'
+	import { CallingOptions, Context, Service, ServiceMethods, ServiceSchema, ServiceSettingSchema } from 'moleculer'
+	import { ApiSettingsSchema } from 'moleculer-web'
+	import * as http from 'http'
+	import { SocketOptions } from 'socket.io-client'
 
-	class ClientMoleculerIO<
-		ClientUser,
+	class ClientMoleculerIO<ClientUser,
 		ListenEvents extends EventsMap,
 		EmitEvents extends EventsMap,
-		ServerSideEvents extends EventsMap
-	> extends Client<ListenEvents, EmitEvents, ServerSideEvents> {
-		user?: ClientUser;
+		ServerSideEvents extends EventsMap> extends Client<ListenEvents, EmitEvents, ServerSideEvents> {
+		user?: ClientUser
 	}
-	export class SocketMoleculerIO<
-		ClientUser = unknown,
+
+	export class SocketMoleculerIO<ClientUser = unknown,
 		ServiceSettings = ServiceSettingSchema,
 		ListenEvents extends EventsMap = DefaultEventsMap,
 		EmitEvents extends EventsMap = ListenEvents,
-		ServerSideEvents extends EventsMap = DefaultEventsMap
-	> extends Socket<ListenEvents, EmitEvents, ServerSideEvents> {
-		readonly $service: Service<ServiceSettings>;
-		readonly client: ClientMoleculerIO<ClientUser, ListenEvents, EmitEvents, ServerSideEvents>;
+		ServerSideEvents extends EventsMap = DefaultEventsMap> extends Socket<ListenEvents, EmitEvents, ServerSideEvents> {
+		readonly $service: Service<ServiceSettings>
+		readonly client: ClientMoleculerIO<ClientUser, ListenEvents, EmitEvents, ServerSideEvents>
 	}
+
 	interface NamespaceEvent {
 		/**
 		 * The `event` has a `mappingPolicy` property to handle events without aliases.
@@ -41,7 +32,7 @@ declare module "moleculer-io" {
 		 * @see https://moleculer.services/docs/0.14/moleculer-web.html#Mapping-policy
 		 * @default: "all"
 		 */
-		mappingPolicy: "all" | "restrict";
+		mappingPolicy: 'all' | 'restrict';
 		/**
 		 * You can use alias names instead of action names.
 		 * @example {
@@ -52,30 +43,32 @@ declare module "moleculer-io" {
 		aliases: Record<string, string>;
 		whitelist: string[];
 		callOptions: Partial<CallingOptions>;
+
 		/**
 		 * The event handler has before & after call hooks. You can use it to set ctx.meta, access socket object or modify the response data
 		 * @see https://github.com/moleculerjs/moleculer-io#handler-hooks
 		 */
-		onBeforeCall<P = any>(
+		onBeforeCall<P = any> (
 			ctx: Context<Record<string, any>, Record<any, any>>,
 			socket: SocketMoleculerIO,
 			action: string,
 			params: P,
 			callOptions: CallingOptions
 		): Promise<void>;
+
 		/**
 		 * The event handler has before & after call hooks. You can use it to set ctx.meta, access socket object or modify the response data
 		 * @see https://github.com/moleculerjs/moleculer-io#handler-hooks
 		 */
-		onAfterCall<ORIGINAL_RES = any, MODIFIED_RES = any>(
+		onAfterCall<ORIGINAL_RES = any, MODIFIED_RES = any> (
 			ctx: Context<Record<string, any>>,
 			socket: SocketMoleculerIO,
 			res: ORIGINAL_RES
 		): Promise<void | MODIFIED_RES>;
 	}
 
-	type NamespaceMiddlewareFunction = Parameters<Server["use"]>[0];
-	type SocketMiddlewareFunction = Parameters<Socket["use"]>[0];
+	type NamespaceMiddlewareFunction = Parameters<Server['use']>[0];
+	type SocketMiddlewareFunction = Parameters<Socket['use']>[0];
 	/**
 	 * Custom event's handler as a function.<br>
 	 * Last params will be `response function` if client called `socket.emit('event', ..., aFunction(...){...})`.<br>
@@ -102,6 +95,7 @@ declare module "moleculer-io" {
 		authorization?: boolean;
 		middlewares?: NamespaceMiddlewareFunction[];
 		packetMiddlewares?: SocketMiddlewareFunction[];
+		onConnection?: (socket: SocketMoleculerIO) => void,
 
 		events: {
 			call: Partial<NamespaceEvent> | EventCustomFunction;
@@ -121,12 +115,10 @@ declare module "moleculer-io" {
 		socket: Socket,
 		handlerItem: IONamespace
 	) => Promise<USER | void>;
-	type SocketGetMetaFunction = <
-		META = {
-			user: any;
-			$rooms: string[];
-		}
-	>(
+	type SocketGetMetaFunction = <META = {
+		user: any;
+		$rooms: string[];
+	}>(
 		socket: SocketMoleculerIO
 	) => Promise<META>;
 	type SocketSaveMetaFunction = (
@@ -157,15 +149,14 @@ declare module "moleculer-io" {
 		socketJoinRooms: SocketJoinRoomsFunction;
 		socketLeaveRoom: SocketLeaveRoomFunction;
 	}
+
 	export interface IOServiceSchema
-		extends ServiceSchema<
-			ApiSettingsSchema & {
-				io?: IOSetting;
-			}
-		> {
+		extends ServiceSchema<ApiSettingsSchema & {
+			io?: IOSetting;
+		}> {
 		methods: Partial<IOMethods> & ThisType<IOServiceSchema>;
 	}
 
-	const SocketIOMixin: Partial<IOServiceSchema>;
-	export default SocketIOMixin;
+	const SocketIOMixin: Partial<IOServiceSchema>
+	export default SocketIOMixin
 }
