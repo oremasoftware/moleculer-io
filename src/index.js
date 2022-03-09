@@ -312,8 +312,8 @@ module.exports = {
 					socket.on(eventName, handlers[eventName]);
 				}
 
-				if (item.onConnection && !_.isFunction(item.onConnection)) {
-					item.onConnection();
+				if (item.onConnection && _.isFunction(item.onConnection)) {
+					item.onConnection(this);
 				}
 			}
 			);
