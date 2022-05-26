@@ -298,6 +298,7 @@ module.exports = {
 
 				socket.on("disconnect", reason => {
 					this.broker.metrics.decrement(C.METRIC_SOCKET_IO_SOCKETS_ACTIVE, labels);
+					this.logger.info("Socket Disconnected : ", this.socketGetMeta(socket), "  -  reason : ", reason);
 				});
 
 				socket.$service = this;
