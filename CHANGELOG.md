@@ -1,5 +1,19 @@
-<a name="v2.0.0"></a>
+<a name="v2.2.0"></a>
 
+# [2.2.0](https://github.com/moleculerjs/moleculer-io/compare/v2.1.0...v2.2.0) (2022-11-07)
+
+- Prevent request/response log based on settings [#52](https://github.com/moleculerjs/moleculer-io/pull/52)
+
+
+<a name="v2.1.0"></a>
+
+# [2.1.0](https://github.com/moleculerjs/moleculer-io/compare/v2.0.0...v2.1.0) (2022-08-13)
+
+- support dynamic namespaces [#50](https://github.com/moleculerjs/moleculer-io/pull/50)
+- added metrics [#51](https://github.com/moleculerjs/moleculer-io/pull/51)
+
+
+<a name="v2.0.0"></a>
 # [2.0.0](https://github.com/moleculerjs/moleculer-io/compare/2443ce39edf16c0ead578b7e567df94eaf9f0ab9...v2.0.0) (2022-01-09)
 
 - **[breaking change]** upgrade to Socket.io v4.
